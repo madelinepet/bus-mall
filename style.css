@@ -1,0 +1,15 @@
+*{
+box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 40px;
+}
+
+img {
+  border: 1px solid purple;
+  width: 100px;
+  position: relative;
+  margin: 30px;
+}
