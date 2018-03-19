@@ -1,6 +1,11 @@
 'use strict';
+
 //define variables including an array to push all instances into. Include a counter to track how many clicks overall.
 Pic.allPics = [];
+
+//need a global variable to track how many votes have happened because unlike the display counter and the click counter, it is not specific to each instance
+var voteCounter = 0;
+
 //constructor function with a counter set to zero so that for each image, you have a different counter. Also include a counter for how many time each is displayed. Add content to the ul called "results"
 function Pic(filePath, name){
   this.filePath = filePath;
@@ -10,18 +15,18 @@ function Pic(filePath, name){
   this.clickCounter = 0;
 }
 
-// //prototypes with for loop to track clicks and views each time the new set of images displays. Limit number of clicks to 25
-// Pic.prototype = function() {
-//   if(displayCounter < 5){
-//     //generate a random number that corresponds to an index's name property in the allPics array
+//prototypes with if else to track clicks and views each time the new set of images displays. Limit number of clicks to 25
+// clickTracker = function() {
+//   if(voteCounter < 5){
 
-//     //use a for loop to add to displayCounter for each instance
-//     for(){
+//     //increment voteCounter
+//     voteCounter++;
+//   }
+//   //use else to display results when 25 clicks has been reached. Concatenate the viewed and clicked counters
+//   else {
 
-//     }
-// }
-// //use else to display results when 25 clicks has been reached. Concatenate the viewed and clicked counters
-// }
+//   }
+// };
 
 //new instances
 new Pic('img/bag.jpg','bag');
@@ -59,16 +64,29 @@ imgThreeElement.addEventListener('click', randomPic);
 //callback function for when each of the three images clicked. Will include a random number generator. Needs to redisplay images when clicked. Needs images to be different each time.
 function randomPic() {
   var randomIndex1 = Math.floor(Math.random()* Pic.allPics.length);
-  imgOneElement.src = Pic.allPics[randomIndex1].filePath;
-  imgOneElement.alt = Pic.allPics[randomIndex1].name;
 
   var randomIndex2 = Math.floor(Math.random()* Pic.allPics.length);
+
+  var randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
+
+  while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3){
+    randomIndex1 = Math.floor(Math.random()* Pic.allPics.length);
+
+    randomIndex2 = Math.floor(Math.random()* Pic.allPics.length);
+
+    randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
+  }
+
+  imgOneElement.src = Pic.allPics[randomIndex1].filePath;
+  imgOneElement.alt = Pic.allPics[randomIndex1].name;
+  Pic.allPics[randomIndex1].displayCounter ++;
+
   imgTwoElement.src = Pic.allPics[randomIndex2].filePath;
   imgTwoElement.alt = Pic.allPics[randomIndex2].name;
 
-  var randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
   imgThreeElement.src = Pic.allPics[randomIndex3].filePath;
   imgThreeElement.alt = Pic.allPics[randomIndex3].name;
+
 }
 //call function to display on page load
 
