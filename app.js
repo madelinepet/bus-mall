@@ -19,8 +19,8 @@ var picVotes = [];
 //need a global variable to track how many votes have happened because unlike the display counter and the click counter, it is not specific to each instance
 var clickCounter = 0;
 
-//access the ul given the ID "results" in my HTML
-var totalListElement = document.getElementById('results');
+//access the ul given the ID "results" in my HTML. Uncomment this, and resultsRender to get list back
+// var totalListElement = document.getElementById('results');
 
 //constructor function with a counter set to zero so that for each image, you have a different counter. Also include a counter for how many time each is displayed.
 function Pic(filePath, name){
@@ -55,14 +55,14 @@ new Pic('img/water-can.jpg','water can');
 new Pic('img/wine-glass.jpg','wine glass');
 
 
-//only use this function to display results, the counters are calculated below
-function resultsRender() {
-  for(var i=0; i < Pic.allPics.length; i++){
-    var listElement= document.createElement('li');
-    listElement.textContent = (Pic.allPics[i].name + ' has ' + Pic.allPics[i].displayCounter + ' views and ' + Pic.allPics[i].voteCounter + ' votes.');
-    totalListElement.appendChild(listElement);
-  }
-}
+//only use this function to display results, the counters are calculated below. uncomment this and function call to get list back
+// function resultsRender() {
+//   for(var i=0; i < Pic.allPics.length; i++){
+//     var listElement= document.createElement('li');
+//     listElement.textContent = (Pic.allPics[i].name + ' has ' + Pic.allPics[i].displayCounter + ' views and ' + Pic.allPics[i].voteCounter + ' votes.');
+//     totalListElement.appendChild(listElement);
+//   }
+// }
 //add event listener to section. Repplaces handler for each individual displayed image I had before.
 Pic.clickableArea.addEventListener('click', clickHandler);
 
@@ -88,7 +88,7 @@ function clickHandler(event){
     imgThreeElement.removeEventListener('click', clickHandler);
 
 
-    //display results as list. Uncomment to see list.
+    //display results as list. Uncomment this and resultsRender function to see list.
     // resultsRender();
 
     //update the votes per goat
@@ -114,7 +114,7 @@ function randomPic() {
   var randomIndex2 = Math.floor(Math.random()* Pic.allPics.length);
 
   var randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
-console.log('previous pics before while', Pic.previousPics);
+  console.log('previous pics before while', Pic.previousPics);
   //in here, in the || conditions, also include || for the three pics using .includes conditions for the Pic.currentPic array so that the next display does not have repeat images.
   while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3 || Pic.previousPics.includes(randomIndex1) || Pic.previousPics.includes(randomIndex2) || Pic.previousPics.includes(randomIndex3)){
     //console log here to see how often you hit duplicates
@@ -135,17 +135,18 @@ console.log('previous pics before while', Pic.previousPics);
   imgOneElement.alt = Pic.allPics[randomIndex1].name;
   Pic.allPics[randomIndex1].displayCounter++;
   Pic.currentPic.push(randomIndex1);
-  
+
   imgTwoElement.src = Pic.allPics[randomIndex2].filePath;
   imgTwoElement.alt = Pic.allPics[randomIndex2].name;
   Pic.allPics[randomIndex2].displayCounter++;
   Pic.currentPic.push(randomIndex2);
-  
+
   imgThreeElement.src = Pic.allPics[randomIndex3].filePath;
   imgThreeElement.alt = Pic.allPics[randomIndex3].name;
   Pic.allPics[randomIndex3].displayCounter++;
   Pic.currentPic.push(randomIndex3);
-  
+
+  //need to push into old pics array last because the first time it runs, need to pupulate the array so it can compare.
   Pic.previousPics.push.apply(Pic.previousPics, Pic.currentPic);
 }
 //call function to display on page load

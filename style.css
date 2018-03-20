@@ -5,15 +5,28 @@ box-sizing: border-box;
 h1 {
   font-size: 2em;
   margin-bottom: 40px;
+  display: inline-block;
+}
+#busPic{
+  float: left;
 }
 
 img {
-  border: 1px solid purple;
-  width: 200px;
-  height: 200px;
+  float: bottom;
   position: relative;
+  border: 1px solid purple;
+  width: 250px;
+  height: 250px;
   margin: 30px;
 }
+
+section{
+  border: 1px dashed green;
+  display: block;
+  margin-top: 200px;
+}
+
+
 canvas {
 height: 500px;
 width: 800px;
