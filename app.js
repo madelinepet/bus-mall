@@ -1,12 +1,19 @@
 'use strict';
 
+//access the section element from the dom
 Pic.clickableArea = document.getElementById('clickCount');
 
 //define variables including an array to push all instances into. Include a counter to track how many clicks overall.
 Pic.allPics = [];
 
-//need an array with only the current object in it.
+//need an array with only the current objects in it.
 Pic.currentPic =[];
+
+//names for chart lables
+var picNames = [];
+
+//get votes for bar chart data
+var picVotes = [];
 
 //need a global variable to track how many votes have happened because unlike the display counter and the click counter, it is not specific to each instance
 var clickCounter = 0;
@@ -21,6 +28,7 @@ function Pic(filePath, name){
   this.displayCounter = 0;
   this.voteCounter = 0;
   Pic.allPics.push(this);
+  picNames.push(this.name);
 }
 
 //new instances
@@ -54,38 +62,50 @@ function resultsRender() {
     totalListElement.appendChild(listElement);
   }
 }
-// Pic.clickableArea.addEventListener('click', clickTracker);
+//add event listener to section. Repplaces handler for each individual displayed image I had before.
+Pic.clickableArea.addEventListener('click', clickHandler);
+
 //access the element by ID from the DOM
 var imgOneElement = document.getElementById('img1');
 var imgTwoElement = document.getElementById('img2');
 var imgThreeElement = document.getElementById('img3');
 
-//add event listener to track when each image spot clicked, and when it is, run callback function below.
-imgOneElement.addEventListener('click', clickHandler);
-imgTwoElement.addEventListener('click', clickHandler);
-imgThreeElement.addEventListener('click', clickHandler);
-
 function clickHandler(event){
   clickCounter ++;
-  if (event.target.id === 'img1') {
-    //add one to the click counter of the current pics array at 0
-    Pic.currentPic[0].voteCounter++;
+
+  for(var i in Pic.allPics){
+    if (event.target.alt === Pic.allPics[i].name){
+      Pic.allPics[i].voteCounter++;
+    }
   }
-  if(event.target.id === 'img2'){
-    Pic.currentPic[1].voteCounter++;
-  }
-  if(event.target.id === 'img3'){
-    Pic.currentPic[2].voteCounter++;
-  }
-  if (clickCounter >=25) {
+
+  if (clickCounter >=5) {
+    //turn off event listener
+    Pic.clickableArea.removeEventListener('click', clickHandler);
+    imgOneElement.removeEventListener('click', clickHandler);
+    imgTwoElement.removeEventListener('click', clickHandler);
+    imgThreeElement.removeEventListener('click', clickHandler);
+
+
+    //display results as list
     resultsRender();
-  //then set display to none so user can no longer vote
+
+    //update the votes per goat
+    updateVotes();
+  //display the chart here
+  //renderChart();
   }
   else{
-    console.log(event.target.id);
     randomPic();
   }
 }
+
+function updateVotes(){
+  for(var i in Pic.allPics){
+    picVotes.push(Pic.allPics[i].votes);
+  }
+}
+
 //callback function for when each of the three images clicked. Will include a random number generator. Needs to redisplay images when clicked. Needs images to be different each time.
 function randomPic() {
   var randomIndex1 = Math.floor(Math.random()* Pic.allPics.length);
@@ -94,14 +114,18 @@ function randomPic() {
 
   var randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
 
-  while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3){
+  //in here, in the || conditions, also include || for the three pics using .includes conditions for the Pic.currentPic array so that the next display does not have repeat images.
+  while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3 || Pic.currentPic.includes(randomIndex1) || Pic.currentPic.includes(randomIndex2) || Pic.currentPic.includes(randomIndex3)){
+    //console log here to see how often you hit duplicates
+    console.log('Duplicate was caught!');
+
     randomIndex1 = Math.floor(Math.random()* Pic.allPics.length);
 
     randomIndex2 = Math.floor(Math.random()* Pic.allPics.length);
 
     randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
   }
-
+  //now that my indexes have unique values, display three images, incriment display counter for each
   Pic.currentPic = [];
   imgOneElement.src = Pic.allPics[randomIndex1].filePath;
   imgOneElement.alt = Pic.allPics[randomIndex1].name;
@@ -123,3 +147,19 @@ function randomPic() {
 //call function to display on page load
 
 randomPic();
+
+//array of colors with 20 colors in it that the chart can use. If you leave colors out, it will automatically be grey
+var arrayOfChartColors = [];
+
+// function renderChart ={
+// var context = document.getElementByID('results-chart').getContext('2d');
+// var resultChart = new Chart (context{
+// type: 'bar',
+// data: {
+// labels: picNames, //array of pic names, populated above because chart JS expects an array of strings
+// datasets:[{
+// label: 'Number of Votes'
+// }]
+// }
+// })
+// }
