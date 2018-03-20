@@ -8,6 +8,7 @@ Pic.allPics = [];
 
 //need an array with only the current objects in it.
 Pic.currentPic =[];
+Pic.previousPics=[];
 
 //names for chart lables
 var picNames = [];
@@ -46,7 +47,7 @@ new Pic('img/pen.jpg','pen');
 new Pic('img/pet-sweep.jpg','pet-sweep');
 new Pic('img/scissors.jpg','scissors');
 new Pic('img/shark.jpg','shark');
-new Pic('img/sweep.png','shark');
+new Pic('img/sweep.png','sweep');
 new Pic('img/tauntaun.jpg','tauntaun');
 new Pic('img/unicorn.jpg','unicorn');
 new Pic('img/usb.gif','usb');
@@ -79,7 +80,7 @@ function clickHandler(event){
     }
   }
 
-  if (clickCounter >=5) {
+  if (clickCounter >=25) {
     //turn off event listener
     Pic.clickableArea.removeEventListener('click', clickHandler);
     imgOneElement.removeEventListener('click', clickHandler);
@@ -87,13 +88,13 @@ function clickHandler(event){
     imgThreeElement.removeEventListener('click', clickHandler);
 
 
-    //display results as list
-    resultsRender();
+    //display results as list. Uncomment to see list.
+    // resultsRender();
 
     //update the votes per goat
     updateVotes();
-  //display the chart here
-  //renderChart();
+    //display the chart here
+    renderChart();
   }
   else{
     randomPic();
@@ -102,7 +103,7 @@ function clickHandler(event){
 
 function updateVotes(){
   for(var i in Pic.allPics){
-    picVotes.push(Pic.allPics[i].votes);
+    picVotes.push(Pic.allPics[i].voteCounter);
   }
 }
 
@@ -113,9 +114,9 @@ function randomPic() {
   var randomIndex2 = Math.floor(Math.random()* Pic.allPics.length);
 
   var randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
-
+console.log('previous pics before while', Pic.previousPics);
   //in here, in the || conditions, also include || for the three pics using .includes conditions for the Pic.currentPic array so that the next display does not have repeat images.
-  while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3 || Pic.currentPic.includes(randomIndex1) || Pic.currentPic.includes(randomIndex2) || Pic.currentPic.includes(randomIndex3)){
+  while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3 || Pic.previousPics.includes(randomIndex1) || Pic.previousPics.includes(randomIndex2) || Pic.previousPics.includes(randomIndex3)){
     //console log here to see how often you hit duplicates
     console.log('Duplicate was caught!');
 
@@ -126,40 +127,56 @@ function randomPic() {
     randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
   }
   //now that my indexes have unique values, display three images, incriment display counter for each
+  Pic.previousPics = [];
+  console.log('currenet pics', Pic.currentPic);
+  console.log('previous pics', Pic.previousPics);
   Pic.currentPic = [];
   imgOneElement.src = Pic.allPics[randomIndex1].filePath;
   imgOneElement.alt = Pic.allPics[randomIndex1].name;
   Pic.allPics[randomIndex1].displayCounter++;
-  Pic.currentPic.push(Pic.allPics[randomIndex1]);
-
+  Pic.currentPic.push(randomIndex1);
+  
   imgTwoElement.src = Pic.allPics[randomIndex2].filePath;
   imgTwoElement.alt = Pic.allPics[randomIndex2].name;
   Pic.allPics[randomIndex2].displayCounter++;
-  Pic.currentPic.push(Pic.allPics[randomIndex2]);
-
+  Pic.currentPic.push(randomIndex2);
+  
   imgThreeElement.src = Pic.allPics[randomIndex3].filePath;
   imgThreeElement.alt = Pic.allPics[randomIndex3].name;
   Pic.allPics[randomIndex3].displayCounter++;
-  Pic.currentPic.push(Pic.allPics[randomIndex3]);
-
-  console.log(Pic.currentPic);
+  Pic.currentPic.push(randomIndex3);
+  
+  Pic.previousPics.push.apply(Pic.previousPics, Pic.currentPic);
 }
 //call function to display on page load
 
 randomPic();
 
 //array of colors with 20 colors in it that the chart can use. If you leave colors out, it will automatically be grey
-var arrayOfChartColors = [];
+var arrayOfChartColors = ['red','orange','yellow','green','blue','purple','pink', 'red','orange','yellow','green','blue','purple','pink','red','orange','yellow','green','blue','purple'];
 
-// function renderChart ={
-// var context = document.getElementByID('results-chart').getContext('2d');
-// var resultChart = new Chart (context{
-// type: 'bar',
-// data: {
-// labels: picNames, //array of pic names, populated above because chart JS expects an array of strings
-// datasets:[{
-// label: 'Number of Votes'
-// }]
-// }
-// })
-// }
+function renderChart(){
+  var context = document.getElementById('results-chart').getContext('2d');
+
+  new Chart(context, {
+    type: 'bar',
+    data: {
+      labels: picNames, //array of pic names, populated above because chart JS expects an array of strings
+      datasets: [{
+        label: 'Number of Votes',
+        data: picVotes,
+        backgroundColor: arrayOfChartColors,
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            stepSize: 1,
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
