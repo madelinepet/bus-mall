@@ -5,8 +5,6 @@ box-sizing: border-box;
 h1 {
   color: blue;
   position: relative;
-  left: 350px;
-  top: 110px;
   font-size: 4em;
   margin-bottom: 0px;
   display: inline-block;
@@ -16,8 +14,6 @@ h1 {
 h2{
   color: red;
   position: relative;
-  left: 45px;
-  top: 75px;
   font-size: 2em;
   display: inline-block;
   font-family: 'Josefin Sans', sans-serif;
@@ -25,6 +21,7 @@ h2{
 
 #busPic{
   float: left;
+  height: 200px;
 }
 
 img {
@@ -38,7 +35,7 @@ img {
 
 section{
   border: 1px dashed green;
-  display: inline-block;
+  display: block;
   margin-top: 20px;
 }
 
@@ -47,4 +44,5 @@ canvas {
 height: 500px;
 width: 800px;
 padding: 30px;
+margin: 40px;
 }
