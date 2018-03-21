@@ -46,6 +46,7 @@ img:hover{
 }
 
 section{
+  background-color: turquoise;
   border: 1px inset green;
   display: block;
   overflow: hidden;
