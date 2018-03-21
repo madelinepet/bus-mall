@@ -3,10 +3,26 @@ box-sizing: border-box;
 }
 
 h1 {
-  font-size: 2em;
-  margin-bottom: 40px;
+  color: blue;
+  position: relative;
+  left: 350px;
+  top: 110px;
+  font-size: 4em;
+  margin-bottom: 0px;
   display: inline-block;
+  font-family: 'Dancing Script', cursive;
 }
+
+h2{
+  color: red;
+  position: relative;
+  left: 45px;
+  top: 75px;
+  font-size: 2em;
+  display: inline-block;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
 #busPic{
   float: left;
 }
@@ -22,8 +38,8 @@ img {
 
 section{
   border: 1px dashed green;
-  display: block;
-  margin-top: 200px;
+  display: inline-block;
+  margin-top: 20px;
 }
 
 
