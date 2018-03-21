@@ -3,13 +3,48 @@ box-sizing: border-box;
 }
 
 h1 {
+  color: blue;
+  position: relative;
+  left: 350px;
+  top: 110px;
+  font-size: 4em;
+  margin-bottom: 0px;
+  display: inline-block;
+  font-family: 'Dancing Script', cursive;
+}
+
+h2{
+  color: red;
+  position: relative;
+  left: 45px;
+  top: 75px;
   font-size: 2em;
-  margin-bottom: 40px;
+  display: inline-block;
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+#busPic{
+  float: left;
 }
 
 img {
-  border: 1px solid purple;
-  width: 22%;
+  float: bottom;
   position: relative;
+  border: 1px solid purple;
+  width: 250px;
+  height: 250px;
   margin: 30px;
+}
+
+section{
+  border: 1px dashed green;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+
+canvas {
+height: 500px;
+width: 800px;
+padding: 30px;
 }
