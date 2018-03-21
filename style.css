@@ -1,48 +1,78 @@
 *{
 box-sizing: border-box;
 }
+body{
+  background: repeating-radial-gradient(lightblue, turquoise 10%);
+}
 
 h1 {
   color: blue;
-  position: relative;
   font-size: 4em;
-  margin-bottom: 0px;
-  display: inline-block;
+  margin-bottom: 30px;
   font-family: 'Dancing Script', cursive;
+  float: left;
 }
 
 h2{
   color: red;
   position: relative;
+  left: 30px;
   font-size: 2em;
-  display: inline-block;
   font-family: 'Josefin Sans', sans-serif;
 }
 
 #busPic{
   float: left;
   height: 200px;
+  cursor: auto;
+}
+
+#busPic:hover{
+border: 1px solid purple;
 }
 
 img {
   float: bottom;
   position: relative;
   border: 1px solid purple;
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 300px;
   margin: 30px;
 }
 
-section{
-  border: 1px dashed green;
-  display: block;
-  margin-top: 20px;
+img:hover{
+  border: 3px solid white;
+  cursor: pointer;
 }
 
+section{
+  border: 1px inset green;
+  display: block;
+  overflow: hidden;
+  width: 80%;
+  margin: auto;
+  margin-bottom: 20px;
+}
 
 canvas {
 height: 500px;
 width: 800px;
 padding: 30px;
 margin: 40px;
+}
+
+button {
+position: absolute;
+top: 1645px;
+left: 105px;
+width: 300px;
+height: 90px;
+margin-bottom: 30px;
+}
+
+button:hover{
+  background: linear-gradient(to right, turquoise, blue, purple);
+  color: white;
+  border: 3px solid white; 
+  cursor: pointer;
 }
