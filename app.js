@@ -23,6 +23,8 @@ function Pic(filePath, name){
   Pic.allPics.push(this);
 }
 
+function createInstances(){
+
 //new instances
 new Pic('img/bag.jpg','bag');
 new Pic('img/banana.jpg', 'banana');
@@ -44,7 +46,7 @@ new Pic('img/unicorn.jpg','unicorn');
 new Pic('img/usb.gif','usb');
 new Pic('img/water-can.jpg','water can');
 new Pic('img/wine-glass.jpg','wine glass');
-
+}
 
 //only use this function to display results, the counters are calculated below
 function resultsRender() {
@@ -120,6 +122,7 @@ function randomPic() {
 
   console.log(Pic.currentPic);
 }
+//create the list of pictures
+createInstances();
 //call function to display on page load
-
 randomPic();
