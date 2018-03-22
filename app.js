@@ -169,7 +169,7 @@ createInstances();
 randomPic();
 
 //array of colors with 20 colors in it that the chart can use. If you leave colors out, it will automatically be grey
-var arrayOfChartColors = ['red','orange','yellow','green','blue','purple','pink', 'red','orange','yellow','green','blue','purple','pink','red','orange','yellow','green','blue','purple'];
+var arrayOfChartColors = ['green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple'];
 
 function renderChart(){
   //save to local storage
