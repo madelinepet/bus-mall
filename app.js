@@ -28,33 +28,42 @@ function Pic(filePath, name){
   this.name = name;
   this.displayCounter = 0;
   this.voteCounter = 0;
+  this.picName = [];
   Pic.allPics.push(this);
-  picNames.push(this.name);
 }
 
 function createInstances(){
-
-//new instances
-new Pic('img/bag.jpg','bag');
-new Pic('img/banana.jpg', 'banana');
-new Pic('img/bathroom.jpg','bathroom');
-new Pic('img/boots.jpg','boots');
-new Pic('img/breakfast.jpg','breakfast');
-new Pic('img/bubblegum.jpg','bubblegum');
-new Pic('img/chair.jpg','chair');
-new Pic('img/cthulhu.jpg','cthulhu');
-new Pic('img/dog-duck.jpg','dog-duck');
-new Pic('img/dragon.jpg','dragon');
-new Pic('img/pen.jpg','pen');
-new Pic('img/pet-sweep.jpg','pet-sweep');
-new Pic('img/scissors.jpg','scissors');
-new Pic('img/shark.jpg','shark');
-new Pic('img/sweep.png','sweep');
-new Pic('img/tauntaun.jpg','tauntaun');
-new Pic('img/unicorn.jpg','unicorn');
-new Pic('img/usb.gif','usb');
-new Pic('img/water-can.jpg','water can');
-new Pic('img/wine-glass.jpg','wine glass');
+  var picsAsString = localStorage.getItem('pictures');
+  var usablePics = JSON.parse(picsAsString);
+  //if usablePics exists and has a length get it from local storage, do not create new instances anymore
+  console.log('useablepics', usablePics);
+  if(usablePics && usablePics.length){
+    Pic.allPics = usablePics;
+    console.log('inside if', Pic.allPics);
+    //quit the function
+    return;
+  }
+  //new instances
+  new Pic('img/bag.jpg','Bag');
+  new Pic('img/banana.jpg', 'Banana');
+  new Pic('img/bathroom.jpg','Bathroom');
+  new Pic('img/boots.jpg','Boots');
+  new Pic('img/breakfast.jpg','Breakfast');
+  new Pic('img/bubblegum.jpg','Bubblegum');
+  new Pic('img/chair.jpg','Chair');
+  new Pic('img/cthulhu.jpg','Cthulhu');
+  new Pic('img/dog-duck.jpg','Dog-duck');
+  new Pic('img/dragon.jpg','Dragon');
+  new Pic('img/pen.jpg','Pen');
+  new Pic('img/pet-sweep.jpg','Pet-sweep');
+  new Pic('img/scissors.jpg','Scissors');
+  new Pic('img/shark.jpg','Shark');
+  new Pic('img/sweep.png','Sweep');
+  new Pic('img/tauntaun.jpg','Tauntaun');
+  new Pic('img/unicorn.jpg','Unicorn');
+  new Pic('img/usb.gif','Usb');
+  new Pic('img/water-can.jpg','Water can');
+  new Pic('img/wine-glass.jpg','Wine glass');
 }
 
 //only use this function to display results, the counters are calculated below. uncomment this and function call to get list back
@@ -93,7 +102,7 @@ function clickHandler(event){
     //display results as list. Uncomment this and resultsRender function to see list.
     // resultsRender();
 
-    //update the votes per goat
+    //update the votes per pic
     updateVotes();
     //display the chart here
     renderChart();
@@ -105,8 +114,13 @@ function clickHandler(event){
 
 function updateVotes(){
   for(var i in Pic.allPics){
+    console.log('i', i);
+    console.log('at i', Pic.allPics[i]);
     picVotes.push(Pic.allPics[i].voteCounter);
+    //populate the picname array here so the chart can access it
+    picNames.push(Pic.allPics[i].name);
   }
+  console.log('picvotes', picVotes);
 }
 
 //callback function for when each of the three images clicked. Will include a random number generator. Needs to redisplay images when clicked. Needs images to be different each time.
@@ -116,7 +130,7 @@ function randomPic() {
   var randomIndex2 = Math.floor(Math.random()* Pic.allPics.length);
 
   var randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
-  console.log('previous pics before while', Pic.previousPics);
+
   //in here, in the || conditions, also include || for the three pics using .includes conditions for the Pic.currentPic array so that the next display does not have repeat images.
   while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3 || Pic.previousPics.includes(randomIndex1) || Pic.previousPics.includes(randomIndex2) || Pic.previousPics.includes(randomIndex3)){
     //console log here to see how often you hit duplicates
@@ -130,8 +144,6 @@ function randomPic() {
   }
   //now that my indexes have unique values, display three images, incriment display counter for each
   Pic.previousPics = [];
-  console.log('currenet pics', Pic.currentPic);
-  console.log('previous pics', Pic.previousPics);
   Pic.currentPic = [];
   imgOneElement.src = Pic.allPics[randomIndex1].filePath;
   imgOneElement.alt = Pic.allPics[randomIndex1].name;
@@ -157,16 +169,22 @@ createInstances();
 randomPic();
 
 //array of colors with 20 colors in it that the chart can use. If you leave colors out, it will automatically be grey
-var arrayOfChartColors = ['red','orange','yellow','green','blue','purple','pink', 'red','orange','yellow','green','blue','purple','pink','red','orange','yellow','green','blue','purple'];
+var arrayOfChartColors = ['green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple'];
 
 function renderChart(){
-  var context = document.getElementById('results-chart').getContext('2d');
+  //save to local storage
+  var savePictures = JSON.stringify(Pic.allPics);
+  localStorage.setItem('pictures', savePictures);
+  console.log('picvotes in render', picVotes);
 
+  //create 2d chart
+  var context = document.getElementById('results-chart').getContext('2d');
   new Chart(context, {
     type: 'bar',
     data: {
       labels: picNames, //array of pic names, populated above because chart JS expects an array of strings
       datasets: [{
+        barPercentage: 0.01,
         label: 'Number of Votes',
         data: picVotes,
         backgroundColor: arrayOfChartColors,
