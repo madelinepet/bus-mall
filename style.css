@@ -47,7 +47,7 @@ img:hover{
 }
 
 section{
-  background: linear-gradient(to right, rgb(30, 152, 201), turquoise);
+  background: linear-gradient(to bottom, rgb(30, 152, 201), turquoise);
   border: 1px inset green;
   border-radius: 25px;
   display: block;
