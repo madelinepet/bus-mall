@@ -3,10 +3,9 @@
 //access the section element from the dom
 Pic.clickableArea = document.getElementById('clickCount');
 
-//define variables including an array to push all instances into. Include a counter to track how many clicks overall.
 Pic.allPics = [];
 
-//need an array with only the current objects in it.
+//arrays with the current object and the previous objects in it to compare for randomization
 Pic.currentPic =[];
 Pic.previousPics=[];
 
@@ -16,13 +15,12 @@ var picNames = [];
 //get votes for bar chart data
 var picVotes = [];
 
-//need a global variable to track how many votes have happened because unlike the display counter and the click counter, it is not specific to each instance
+//global var to track click times in general so it maxes out at 25 votes
 var clickCounter = 0;
 
 //access the ul given the ID "results" in my HTML. Uncomment this, and resultsRender to get list back
 // var totalListElement = document.getElementById('results');
 
-//constructor function with a counter set to zero so that for each image, you have a different counter. Also include a counter for how many time each is displayed.
 function Pic(filePath, name){
   this.filePath = filePath;
   this.name = name;
@@ -36,10 +34,8 @@ function createInstances(){
   var picsAsString = localStorage.getItem('pictures');
   var usablePics = JSON.parse(picsAsString);
   //if usablePics exists and has a length get it from local storage, do not create new instances anymore
-  console.log('useablepics', usablePics);
   if(usablePics && usablePics.length){
     Pic.allPics = usablePics;
-    console.log('inside if', Pic.allPics);
     //quit the function
     return;
   }
@@ -74,7 +70,8 @@ function createInstances(){
 //     totalListElement.appendChild(listElement);
 //   }
 // }
-//add event listener to section. Repplaces handler for each individual displayed image I had before.
+
+//add event listener to section
 Pic.clickableArea.addEventListener('click', clickHandler);
 
 //access the element by ID from the DOM
@@ -103,7 +100,9 @@ function clickHandler(event){
     // resultsRender();
 
     //update the votes per pic
-    updateVotes();
+    sumarizeTotals();
+    //set item in local storage
+    storeData();
     //display the chart here
     renderChart();
   }
@@ -112,18 +111,15 @@ function clickHandler(event){
   }
 }
 
-function updateVotes(){
+function sumarizeTotals(){
   for(var i in Pic.allPics){
-    console.log('i', i);
-    console.log('at i', Pic.allPics[i]);
     picVotes.push(Pic.allPics[i].voteCounter);
     //populate the picname array here so the chart can access it
     picNames.push(Pic.allPics[i].name);
   }
-  console.log('picvotes', picVotes);
 }
 
-//callback function for when each of the three images clicked. Will include a random number generator. Needs to redisplay images when clicked. Needs images to be different each time.
+//callback function for when each of the three images clicked.
 function randomPic() {
   var randomIndex1 = Math.floor(Math.random()* Pic.allPics.length);
 
@@ -131,11 +127,7 @@ function randomPic() {
 
   var randomIndex3 = Math.floor(Math.random()* Pic.allPics.length);
 
-  //in here, in the || conditions, also include || for the three pics using .includes conditions for the Pic.currentPic array so that the next display does not have repeat images.
   while(randomIndex1===randomIndex2 || randomIndex1===randomIndex3 || randomIndex2===randomIndex3 || Pic.previousPics.includes(randomIndex1) || Pic.previousPics.includes(randomIndex2) || Pic.previousPics.includes(randomIndex3)){
-    //console log here to see how often you hit duplicates
-    console.log('Duplicate was caught!');
-
     randomIndex1 = Math.floor(Math.random()* Pic.allPics.length);
 
     randomIndex2 = Math.floor(Math.random()* Pic.allPics.length);
@@ -168,21 +160,22 @@ createInstances();
 //call function to display on page load
 randomPic();
 
-//array of colors with 20 colors in it that the chart can use. If you leave colors out, it will automatically be grey
+//array of colors with 20 colors
 var arrayOfChartColors = ['green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple','green','turquoise','blue','purple'];
 
-function renderChart(){
-  //save to local storage
+function storeData(){
+//save to local storage
   var savePictures = JSON.stringify(Pic.allPics);
   localStorage.setItem('pictures', savePictures);
-  console.log('picvotes in render', picVotes);
+}
 
+function renderChart(){
   //create 2d chart
   var context = document.getElementById('results-chart').getContext('2d');
   new Chart(context, {
     type: 'bar',
     data: {
-      labels: picNames, //array of pic names, populated above because chart JS expects an array of strings
+      labels: picNames,
       datasets: [{
         barPercentage: 0.01,
         label: 'Number of Votes',
